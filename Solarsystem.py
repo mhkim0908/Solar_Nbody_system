@@ -63,10 +63,11 @@ def f(m_obj,data,indexnumber):
         dist = np.sqrt(np.sum((coord - m_obj[z].position)**2))
         if z == indexnumber:
             continue
-        if r0<m_obj[z].distance:
-            fv +=  m_obj[z].mu*coord/(dist**3)
         else:
-            fv -= m_obj[z].mu*coord/(dist**3)
+            if r0<m_obj[z].distance:
+                fv +=  m_obj[z].mu*coord/(dist**3)
+            else:
+                fv -= m_obj[z].mu*coord/(dist**3)
 
     answer = np.concatenate((fr,fv),axis=None,dtype=float)
     return answer
