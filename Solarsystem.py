@@ -49,25 +49,28 @@ class Solarsystem(list):
 
 #Calculation function part
 
-def f(m_obj,data,indexnumber):
+def f(m_obj,data,planetindexnumber):
+    
     coord = np.split(data,2)[0]
     v = np.split(data,2)[1]
-    r0 = m_obj[indexnumber].distance
+    
+    r0 = np.sqrt(np.sum(coord**2))
+    
     #next position
-
     fr = v
+    
     #next velocity 
     fv = np.array([0,0],float)
 
     for z in range(0,len(m_obj)):
-        dist = np.sqrt(np.sum((coord - m_obj[z].position)**2))
-        if z == indexnumber:
+        if z == planetindexnumber:
             continue
         else:
+            dist = np.sqrt(np.sum((coord - m_obj[z].position)**2))
             if r0<m_obj[z].distance:
-                fv +=  m_obj[z].mu*coord/(dist**3)
+                fv += m_obj[z].mu*coord/dist**3
             else:
-                fv -= m_obj[z].mu*coord/(dist**3)
+                fv -= m_obj[z].mu*coord/dist**3
 
     answer = np.concatenate((fr,fv),axis=None,dtype=float)
     return answer
@@ -80,6 +83,7 @@ def update(m_obj,function,h,k):
     k4 = h * f(m_obj,data+k3,k)
     newdata = data + (k1+(2*k2)+(2*k3)+k4)/6
     function.update(np.split(newdata,2)[0],np.split(newdata,2)[1])
+
 
 
 #Main Part
