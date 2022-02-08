@@ -45,7 +45,6 @@ class Solarsystem(list):
         for i in range(len(self)):
             print (f" {self[i].PlanetName}" , self[i].position)
         
-
 #Calculation function part
 
 def f(m_obj,data,planetindexnumber):
@@ -88,11 +87,9 @@ def update(m_obj,function,h,k):
     
     function.update(np.split(ans,2)[0],np.split(ans,2)[1])
 
-
-
-
 #Main Part
 if __name__ == '__main__':
+
     fig = plt.figure(figsize=(15,15))
     ax = fig.add_subplot(1, 1, 1)
 
@@ -114,5 +111,3 @@ if __name__ == '__main__':
         t += dt
     
     plt.show()
-
-    
