@@ -46,43 +46,48 @@ class Solarsystem(list):
             print (f" {self[i].PlanetName}" , self[i].position)
         
 
-
 #Calculation function part
 
 def f(m_obj,data,planetindexnumber):
     
     coord = np.split(data,2)[0]
-    v = np.split(data,2)[1]
-    
-    r0 = np.sqrt(np.sum(coord**2))
+    v = np.split(data,2)[1]    
+    r0 = m_obj[planetindexnumber].distance
     
     #next position
-    fr = v
-    
+    fr = v    
     #next velocity 
     fv = np.array([0,0],float)
 
     for z in range(0,len(m_obj)):
+        
         if z == planetindexnumber:
             continue
         else:
             dist = np.sqrt(np.sum((coord - m_obj[z].position)**2))
+            
             if r0<m_obj[z].distance:
                 fv += m_obj[z].mu*coord/dist**3
             else:
                 fv -= m_obj[z].mu*coord/dist**3
 
     answer = np.concatenate((fr,fv),axis=None,dtype=float)
+
     return answer
 
 def update(m_obj,function,h,k):
+    
     data =  np.concatenate((function.position,function.velocity),axis=None, dtype=float)     
+    
     k1 = h * f(m_obj,data,k)
     k2 = h * f(m_obj,data+k1/2,k)
     k3 = h * f(m_obj,data+k2/2,k)
     k4 = h * f(m_obj,data+k3,k)
-    newdata = data + (k1+(2*k2)+(2*k3)+k4)/6
-    function.update(np.split(newdata,2)[0],np.split(newdata,2)[1])
+    
+    ans = (k1+(2*k2)+(2*k3)+k4)/6
+    
+    function.update(np.split(ans,2)[0],np.split(ans,2)[1])
+
 
 
 
